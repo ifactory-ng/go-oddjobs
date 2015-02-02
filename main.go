@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"gopkg.in/mgo.v2"
+    "gopkg.in/mgo.v2/bson"
 )
 
 var (
@@ -19,9 +20,23 @@ var (
 type User struct {
 	Name string
 	ID   string
-
-	//Please add the remaining items. I just realised i dont have the schema
+    About string
+    Email string
+    Location string
+    Address string
+    Phone string
 }
+
+type Skill struct {
+    Skill_name string
+    User_id int
+    Location string
+    Address string
+    Price string
+    Tag_name string
+    Description string
+    
+    }
 
 func init() {
 	MONGOSERVER = os.Getenv("MONGOSERVER")
@@ -58,8 +73,37 @@ func NewUser(data *User) error {
 
 }
 
+func AddSkill(data *Skill) error{
+    session, err := mgo.Dial(MONGOSERVER)
+    checkPanic(err)
+    defer session.Close()
+    
+    skill_collection := session.DB(MONGODB).C("skills")
+    
+    err = skill_collection.Insert(data)
+    
+    if err != nil {
+        return err
+    }
+    return nil
+}
+
+func GetSkills(id string) Skill{
+    session, err := mgo.Dial(MONGOSERVER)
+    checkPanic(err)
+    defer session.Close()
+    
+    skill_collection := session.DB(MONGODB).C("skills")
+    
+    result := Skill{}
+    err = skill_collection.Find(bson.M{"User_id": id}).One(&result)
+    checkFmt(err)
+return result
+
+}
 //checkFmt checks the value of an error and prints it to standard output. I'm
 //adding it to reduce the number of error checking ifs in my code
+
 func checkFmt(err error) {
 	if err != nil {
 		fmt.Println(err.Error)
