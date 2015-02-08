@@ -2,10 +2,9 @@ package main
 
 import (
 	"fmt"
+	"log"
+	"net/http"
 	"os"
-
-	"gopkg.in/mgo.v2"
-    "gopkg.in/mgo.v2/bson"
 )
 
 var (
@@ -14,19 +13,8 @@ var (
 
 	//MONGODB stores the name of the database instance
 	MONGODB string
-)
 
-//User would hold the user data for retrieving and sending items to the database
-type User struct {
-	Name string
-	ID   string
-    About string
-    Email string
-    Location string
-    Address string
-    Phone string
-}
-
+<<<<<<< HEAD
 type Skill struct {
     Skillname string
     Userid int
@@ -37,6 +25,11 @@ type Skill struct {
     Description string
     
     }
+=======
+	//PORT stores the port number
+	PORT string
+)
+>>>>>>> 8dfd2da576f21f4a77c50639b7ef4fe7f1e77089
 
 func init() {
 	MONGOSERVER = os.Getenv("MONGOSERVER")
@@ -51,28 +44,15 @@ func init() {
 		MONGODB = "oddjobs"
 	}
 
-}
+	PORT = os.Getenv("PORT")
+	if PORT == "" {
+		fmt.Println("No Global port has been defined, using default")
 
-//NewUser is for adding a new user to the database. Please note that what you pass to the function is a pointer to the actual data, note the data its self. ie newUser(&NameofVariable)
-func NewUser(data *User) error {
+		PORT = ":8080"
 
-	//MONGOSERVER is a variable containing the mongo db instance address
-	session, err := mgo.Dial(MONGOSERVER)
-	checkPanic(err)
-	defer session.Close()
-
-	//MONGODB is the database name while MONGOC is the collection name
-	collection := session.DB(MONGODB).C("users")
-
-	err = collection.Insert(data)
-
-	if err != nil {
-		return err
 	}
-	return nil
 
-}
-
+<<<<<<< HEAD
 func AddSkill(data *Skill) error{
     session, err := mgo.Dial(MONGOSERVER)
     checkPanic(err)
@@ -118,8 +98,13 @@ func checkPanic(err error) {
 	if err != nil {
 		panic(err)
 	}
+=======
+>>>>>>> 8dfd2da576f21f4a77c50639b7ef4fe7f1e77089
 }
 
 func main() {
+	http.HandleFunc("/", HomeHandler)
+
+	log.Fatal(http.ListenAndServe(PORT, nil))
 
 }
