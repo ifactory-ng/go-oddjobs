@@ -12,7 +12,7 @@ func TestNewUser(t *testing.T) {
 	if err != nil {
 		t.Error("Unable to add user to database")
 	}
-    
+}
     func TestNewSkill(t *testing.T) {
 	skill := Skill{
 		User_id:   "12345678890",

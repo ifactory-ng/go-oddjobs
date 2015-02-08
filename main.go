@@ -28,12 +28,12 @@ type User struct {
 }
 
 type Skill struct {
-    Skill_name string
-    User_id int
+    Skillname string
+    Userid int
     Location string
     Address string
     Price string
-    Tag_name string
+    Tagname string
     Description string
     
     }
@@ -78,9 +78,9 @@ func AddSkill(data *Skill) error{
     checkPanic(err)
     defer session.Close()
     
-    skill_collection := session.DB(MONGODB).C("skills")
+    skillCollection := session.DB(MONGODB).C("skills")
     
-    err = skill_collection.Insert(data)
+    err = skillCollection.Insert(data)
     
     if err != nil {
         return err
@@ -93,14 +93,16 @@ func GetSkills(id string) Skill{
     checkPanic(err)
     defer session.Close()
     
-    skill_collection := session.DB(MONGODB).C("skills")
+    skillCollection := session.DB(MONGODB).C("skills")
     
     result := Skill{}
-    err = skill_collection.Find(bson.M{"User_id": id}).One(&result)
+    err = skillCollection.Find(bson.M{"User_id": id}).One(&result)
     checkFmt(err)
 return result
 
 }
+
+
 //checkFmt checks the value of an error and prints it to standard output. I'm
 //adding it to reduce the number of error checking ifs in my code
 
