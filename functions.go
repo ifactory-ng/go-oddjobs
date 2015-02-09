@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 )
@@ -68,8 +67,29 @@ func AddSkill(data *Skill) error {
 	return nil
 }
 
-//GetSkills gets the list of skills from a user with a particular ID
-func GetSkills(id string) (Skill, error) {
+func GetSkills(id string) ([]Skill, error) {
+	session, err := mgo.Dial(MONGOSERVER)
+
+	result := []Skill{}
+
+	if err != nil {
+		return result, err
+	}
+
+	defer session.Close()
+
+	skillCollection := session.DB(MONGODB).C("skills")
+
+	err = skillCollection.Find(bson.M{"userID": id}).Select(bson.M{"comments": 0}).All(&result)
+	if err != nil {
+		return result, err
+	}
+	return result, nil
+
+}
+
+//GetSkill return a single skill document
+func GetSkill(id string) (Skill, error) {
 	session, err := mgo.Dial(MONGOSERVER)
 
 	result := Skill{}
@@ -81,10 +101,30 @@ func GetSkills(id string) (Skill, error) {
 	defer session.Close()
 
 	skillCollection := session.DB(MONGODB).C("skills")
-	err = skillCollection.Find(bson.M{"userID": id}).Select(bson.M{"comments": 0}).One(&result)
-	checkFmt(err)
+
+	err = skillCollection.Find(bson.M{"_id": id}).Select(bson.M{"comments": 0}).One(&result)
+	if err != nil {
+		return result, err
+	}
 	return result, nil
 
+}
+
+func Authenticate(user *User) error {
+	session, err := mgo.Dial(MONGOSERVER)
+	if err != nil {
+		return err
+	}
+	defer session.Close()
+	result := User{}
+	userCollection := session.DB(MONGODB).C("users")
+
+	err = userCollection.Find(bson.M{"ID": user.ID}).One(&result)
+	if result.ID != "" {
+		return err
+	}
+	NewUser(user)
+	return err
 }
 
 //AddComment adds a comment to a skill
