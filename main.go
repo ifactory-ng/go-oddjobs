@@ -43,7 +43,7 @@ func init() {
 
 func main() {
 	http.HandleFunc("/", HomeHandler)
-
+	http.HandleFunc("/authenticate", LoginHandler)
 	log.Fatal(http.ListenAndServe(PORT, nil))
 
 }

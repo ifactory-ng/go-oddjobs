@@ -50,13 +50,13 @@ func UpdateUser(data *User) error {
 }
 
 //GetProfile returns the authenticated users profile. this does not include users skills
-func GetProfile(id *User) (User, error) {
+func GetProfile(id string) (User, error) {
 	session, err := mgo.Dial(MONGOSERVER)
 
 	result := User{}
 
 	if err != nil {
-		return err
+		return result, err
 	}
 	defer session.Close()
 	collection := session.DB(MONGODB).C("users")
@@ -137,7 +137,7 @@ func GetComment(id string) (Skill, error) {
 
 	result := Skill{}
 
-	if err != nill {
+	if err != nil {
 		return result, err
 	}
 
@@ -167,8 +167,8 @@ func Authenticate(user *User) error {
 	if result.ID != "" {
 		return err
 	}
-	NewUser(user)
-	return err
+
+	return NewUser(user)
 }
 
 //AddComment adds a comment to a skill

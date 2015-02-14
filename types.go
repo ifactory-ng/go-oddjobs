@@ -9,6 +9,7 @@ type User struct {
 	Location string
 	Address  string
 	Phone    string
+	Gender   string
 }
 
 //Skill struct holds skill data to be used for adding and retrieving user skills
