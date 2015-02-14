@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 )
 
@@ -24,6 +25,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(w, stats)
 }
 
+//UserProfileHandler serves the profile
 func UserProfileHandler(w http.ResponseWriter, r *http.Request) {
 	id := r.FormValue("id")
 	data, _ := json.Marshal(GetProfile(id))
@@ -31,18 +33,36 @@ func UserProfileHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.Write(data)
 }
-func AddSkillHandler(w http.ResponseWriter, r *http.Request) {
-	skill := new(Skill)
-	skill.UserID = r.FormValue("id")
-	skill.Location = r.FormValue("location")
-	skill.Description = r.FormValue("desc")
-	skill.Address = r.FormValue("address")
-	skill.SkillName = r.FormValue("skill_name")
-	skill.TagName = r.FormValue("tag_name")
-	resp := AddSkill(skill)
-	fmt.Println(w, resp)
-}
-func UserSkillshandler(w http.ResponseWriter, r *http.Request) {
 
-	GetSkills(id)
+func UserSkillshandler(w http.ResponseWriter, r *http.Request) {
+	switch r.Method {
+	case "GET":
+		id := r.FormValue("id")
+		data, _ := json.Marshal(GetSkills(id))
+
+		w.Header().Set("Content-Type", "application/json")
+		w.Write(data)
+
+	case "POST":
+		skill := new(Skill)
+		skill.UserID = r.FormValue("id")
+		skill.Location = r.FormValue("location")
+		skill.Description = r.FormValue("desc")
+		skill.Address = r.FormValue("address")
+		skill.SkillName = r.FormValue("skill_name")
+		skill.TagName = r.FormValue("tag_name")
+		resp := AddSkill(skill)
+		fmt.Println(w, resp)
+
+	}
+
+}
+
+func SingleSkillHandler(w http.ResponseWriter, r *http.Request) {
+	id := r.FormValue("id")
+	data, _ := json.Marshal(GetSkill(id))
+
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(data)
+
 }
