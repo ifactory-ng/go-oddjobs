@@ -171,6 +171,22 @@ func Authenticate(user *User) error {
 	return NewUser(user)
 }
 
+func Bookmark(bookmark *Bookmark, id string) error {
+	session, err := mgo.Dial(MONGOSERVER)
+	if err != nil {
+		return err
+	}
+	defer session.close()
+	userCollection := session.DB(MONGODB).C("users")
+	query := bson.M{"ID": id}
+	change := bson.M{"$push": bson.M{"Bookmarks": bookmark}}
+	err = userCollection.Update(query, change)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 //AddComment adds a comment to a skill
 func AddComment(comment *Comment, id string) error {
 	session, err := mgo.Dial(MONGOSERVER)
