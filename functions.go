@@ -145,7 +145,7 @@ func GetComment(id string) (Skill, error) {
 
 	skillCollection := session.DB(MONGODB).C("skills")
 
-	err = skillCollection.Find(bson.M{"ID": id}).Select(bson.M{"comments": 1}).One(&result)
+	err = skillCollection.Find(bson.M{"ID": id}).Select(bson.M{"Comments": 1}).One(&result)
 	if err != nil {
 		return result, err
 	}
@@ -187,6 +187,23 @@ func Bookmark(bookmark *Bookmark, id string) error {
 	return nil
 }
 
+//GetBookmarks returns the users bookmarks
+func GetBookmarks(id string) (User, error) {
+	session, err := mgo.Dial(MONGOSERVER)
+	result = User{}
+
+	if err != nil {
+		return result, err
+	}
+	defer session.close()
+	userCollection := session.DB(MONGODB).C("users")
+	err = userCollection.Find(bson.M{"ID": id}).Select(bson.M{"Bookmarks": 1}).All(&result)
+	if err != nil {
+		return result, err
+	}
+	return result, nil
+}
+
 //AddComment adds a comment to a skill
 func AddComment(comment *Comment, id string) error {
 	session, err := mgo.Dial(MONGOSERVER)
@@ -207,6 +224,22 @@ func AddComment(comment *Comment, id string) error {
 
 	return nil
 
+}
+
+func Popular() (Skill, error) {
+	session, err := mgo.Dial(MONGOSERVER)
+
+	result := Skill{}
+
+	if err != nil {
+		return result, err
+	}
+	skillCollection := session.DB(MONGODB).C("skills")
+	err = skillCollection.Find().Limit(15).Sort("rating").All(&result)
+	if err != nil {
+		return result, err
+	}
+	return result, nil
 }
 
 //checkFmt checks the value of an error and prints it to standard output. I'm

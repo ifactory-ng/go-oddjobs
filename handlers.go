@@ -34,28 +34,50 @@ func UserProfileHandler(w http.ResponseWriter, r *http.Request) {
 	w.Write(data)
 }
 
+//UserSkillsHandler to handle all skill related request such as add new skill and getting skill
 func UserSkillshandler(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "GET":
-		id := r.FormValue("id")
+		tmp := r.URL.Query("id")
+		id := tmp[2]
 		data, _ := json.Marshal(GetSkills(id))
 
 		w.Header().Set("Content-Type", "application/json")
 		w.Write(data)
 
 	case "POST":
-		skill := new(Skill)
-		skill.UserID = r.FormValue("id")
-		skill.Location = r.FormValue("location")
-		skill.Description = r.FormValue("desc")
-		skill.Address = r.FormValue("address")
-		skill.SkillName = r.FormValue("skill_name")
-		skill.TagName = r.FormValue("tag_name")
+		skill := Skill{
+
+			UserID:      r.FormValue("id"),
+			Location:    r.FormValue("location"),
+			Description: r.FormValue("desc"),
+			Address:     r.FormValue("address"),
+			SkillName:   r.FormValue("skill_name"),
+			TagName:     r.FormValue("tag_name"),
+		}
 		resp := AddSkill(skill)
 		fmt.Println(w, resp)
 
 	}
 
+}
+
+func BookmarkHandler(w http.ResponseWriter, r *http.Request) {
+	tmp := strings.Split(r.URL.Path, "/")
+	urlID := tmp[2]
+	switch r.Method {
+	case "GET":
+		data, _ := GetBookmarks(urlID)
+		w.Header().Set("Content-Type", "application/json")
+		w.Write(data)
+	case "POST":
+		bookmark := Bookmark{
+			Name:  r.FormValue("name"),
+			Phone: r.FormValue("phone"),
+			Email: r.FormValue("email"),
+		}
+		Bookmark(bookmark, urlID)
+	}
 }
 
 func SingleSkillHandler(w http.ResponseWriter, r *http.Request) {

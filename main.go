@@ -40,10 +40,10 @@ func init() {
 	}
 
 }
-
 func main() {
 	http.HandleFunc("/", HomeHandler)
 	http.HandleFunc("/authenticate", LoginHandler)
+	http.HandleFunc("/user/bookmark/", BookmarkHandler)
 	log.Fatal(http.ListenAndServe(PORT, nil))
 
 }
