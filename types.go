@@ -8,7 +8,7 @@ type User struct {
 	Email     string
 	Location  string
 	Address   string
-	Bookmarks []Bookmark
+	Bookmarks []BookMark
 	Phone     string
 	Gender    string
 }
@@ -17,6 +17,7 @@ type User struct {
 //from the database
 type Skill struct {
 	SkillName   string
+	TagName     string
 	UserID      string
 	Location    string
 	Address     string
@@ -33,7 +34,9 @@ type Comment struct {
 	Comment string
 	Rating  int
 }
-type Bookmark struct {
+
+//Bookmark holds bookmark data
+type BookMark struct {
 	Name  string
 	Phone string
 	Email string

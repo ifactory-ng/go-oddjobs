@@ -3,8 +3,8 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"net/http"
+	"strings"
 )
 
 //HomeHandler serves the home/search page to the user
@@ -28,7 +28,8 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 //UserProfileHandler serves the profile
 func UserProfileHandler(w http.ResponseWriter, r *http.Request) {
 	id := r.FormValue("id")
-	data, _ := json.Marshal(GetProfile(id))
+	tmp, _ := GetProfile(id)
+	data, _ := json.Marshal(tmp)
 
 	w.Header().Set("Content-Type", "application/json")
 	w.Write(data)
@@ -38,15 +39,16 @@ func UserProfileHandler(w http.ResponseWriter, r *http.Request) {
 func UserSkillshandler(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "GET":
-		tmp := r.URL.Query("id")
+		tmp := strings.Split(r.URL.Path, "/")
 		id := tmp[2]
-		data, _ := json.Marshal(GetSkills(id))
+		tmp2, _ := GetSkills(id)
+		data, _ := json.Marshal(tmp2)
 
 		w.Header().Set("Content-Type", "application/json")
 		w.Write(data)
 
 	case "POST":
-		skill := Skill{
+		skill := &Skill{
 
 			UserID:      r.FormValue("id"),
 			Location:    r.FormValue("location"),
@@ -68,21 +70,23 @@ func BookmarkHandler(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "GET":
 		data, _ := GetBookmarks(urlID)
+		bookmarkData, _ := json.Marshal(data)
 		w.Header().Set("Content-Type", "application/json")
-		w.Write(data)
+		w.Write(bookmarkData)
 	case "POST":
-		bookmark := Bookmark{
+		bookmark := &BookMark{
 			Name:  r.FormValue("name"),
 			Phone: r.FormValue("phone"),
 			Email: r.FormValue("email"),
 		}
-		Bookmark(bookmark, urlID)
+		AddBookmark(bookmark, urlID)
 	}
 }
 
 func SingleSkillHandler(w http.ResponseWriter, r *http.Request) {
 	id := r.FormValue("id")
-	data, _ := json.Marshal(GetSkill(id))
+	tmp, _ := GetSkill(id)
+	data, _ := json.Marshal(tmp)
 
 	w.Header().Set("Content-Type", "application/json")
 	w.Write(data)

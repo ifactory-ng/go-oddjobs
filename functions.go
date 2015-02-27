@@ -171,12 +171,12 @@ func Authenticate(user *User) error {
 	return NewUser(user)
 }
 
-func Bookmark(bookmark *Bookmark, id string) error {
+func AddBookmark(bookmark *BookMark, id string) error {
 	session, err := mgo.Dial(MONGOSERVER)
 	if err != nil {
 		return err
 	}
-	defer session.close()
+	defer session.Close()
 	userCollection := session.DB(MONGODB).C("users")
 	query := bson.M{"ID": id}
 	change := bson.M{"$push": bson.M{"Bookmarks": bookmark}}
@@ -188,14 +188,14 @@ func Bookmark(bookmark *Bookmark, id string) error {
 }
 
 //GetBookmarks returns the users bookmarks
-func GetBookmarks(id string) (User, error) {
+func GetBookmarks(id string) ([]User, error) {
 	session, err := mgo.Dial(MONGOSERVER)
-	result = User{}
+	result := []User{}
 
 	if err != nil {
 		return result, err
 	}
-	defer session.close()
+	defer session.Close()
 	userCollection := session.DB(MONGODB).C("users")
 	err = userCollection.Find(bson.M{"ID": id}).Select(bson.M{"Bookmarks": 1}).All(&result)
 	if err != nil {
@@ -234,8 +234,9 @@ func Popular() (Skill, error) {
 	if err != nil {
 		return result, err
 	}
+	defer session.Close()
 	skillCollection := session.DB(MONGODB).C("skills")
-	err = skillCollection.Find().Limit(15).Sort("rating").All(&result)
+	err = skillCollection.Find(bson.M{}).Limit(15).Sort("rating").All(&result)
 	if err != nil {
 		return result, err
 	}
