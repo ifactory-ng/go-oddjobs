@@ -3,7 +3,7 @@ package main
 //User would hold the user data for retrieving and sending items to the database
 type User struct {
 	Name      string
-	id        string
+	ID        string
 	About     string
 	Email     string
 	Location  string

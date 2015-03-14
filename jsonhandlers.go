@@ -12,7 +12,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(r.Form)
 	user := &User{
 		Email:    r.FormValue("email"),
-		id:       r.FormValue("ID"),
+		ID:       r.FormValue("ID"),
 		Name:     r.FormValue("name"),
 		Gender:   r.FormValue("gender"),
 		Location: r.FormValue("location"),
