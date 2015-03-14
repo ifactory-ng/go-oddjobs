@@ -11,6 +11,7 @@ type User struct {
 	Bookmarks []BookMark
 	Phone     string
 	Gender    string
+	Image     string
 }
 
 //Skill struct holds skill data to be used for adding and retrieving user skills
@@ -35,7 +36,30 @@ type Comment struct {
 	Rating  int
 }
 
-//Bookmark holds bookmark data
+//LoginDataStruct carries information about a user if logged in, or an
+//authentication url if not logged in
+type LoginDataStruct struct {
+	URL  string
+	User User
+}
+
+//Page carries pagination info to aid in knowing whether any given page has a
+//next or previous page, and to know its page number
+type Page struct {
+	Prev    bool
+	PrevVal int
+
+	Next    bool
+	NextVal int
+
+	pages int
+	Pages []string
+	Total int
+	Count int
+	Skip  int
+}
+
+//BookMark holds bookmark data
 type BookMark struct {
 	Name  string
 	Phone string
