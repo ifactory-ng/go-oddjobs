@@ -37,7 +37,7 @@ func UpdateUser(data *User) error {
 	defer session.Close()
 
 	collection := session.DB(MONGODB).C("users")
-	query := bson.M{"ID": data.ID}
+	query := bson.M{"ID": data.id}
 	change := bson.M{"$set": data}
 
 	err = collection.Update(query, change)
@@ -61,7 +61,7 @@ func GetProfile(id string) (User, error) {
 	defer session.Close()
 	collection := session.DB(MONGODB).C("users")
 
-	err = collection.Find(bson.M{"ID": id}).One(&result)
+	err = collection.Find(bson.M{"id": id}).One(&result)
 	if err != nil {
 		return result, err
 	}
@@ -163,8 +163,8 @@ func Authenticate(user *User) error {
 	result := User{}
 	userCollection := session.DB(MONGODB).C("users")
 
-	err = userCollection.Find(bson.M{"ID": user.ID}).One(&result)
-	if result.ID != "" {
+	err = userCollection.Find(bson.M{"id": user.id}).One(&result)
+	if result.id != "" {
 		return err
 	}
 
