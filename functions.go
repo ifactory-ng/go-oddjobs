@@ -51,7 +51,7 @@ func UpdateUser(data *User) error {
 }
 
 //GetProfile returns the authenticated users profile. this does not include users skills
-func GetProfile(id *User) (User, error) {
+func GetProfile(id string) (User, error) {
 	session, err := mgo.Dial(MONGOSERVER)
 
 	result := User{}
@@ -146,7 +146,7 @@ func GetComment(id string) (Skill, error) {
 
 	skillCollection := session.DB(MONGODB).C("skills")
 
-	err = skillCollection.Find(bson.M{"ID": id}).Select(bson.M{"comments": 1}).One(&result)
+	err = skillCollection.Find(bson.M{"ID": id}).Select(bson.M{"Comments": 1}).One(&result)
 	if err != nil {
 		return result, err
 	}
@@ -168,8 +168,42 @@ func Authenticate(user *User) error {
 	if result.ID != "" {
 		return err
 	}
-	NewUser(user)
-	return err
+
+	return NewUser(user)
+}
+
+//AddBookmark is a utility function for adding bookmarks
+func AddBookmark(bookmark *BookMark, id string) error {
+	session, err := mgo.Dial(MONGOSERVER)
+	if err != nil {
+		return err
+	}
+	defer session.Close()
+	userCollection := session.DB(MONGODB).C("users")
+	query := bson.M{"ID": id}
+	change := bson.M{"$push": bson.M{"Bookmarks": bookmark}}
+	err = userCollection.Update(query, change)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+//GetBookmarks returns the users bookmarks
+func GetBookmarks(id string) ([]User, error) {
+	session, err := mgo.Dial(MONGOSERVER)
+	result := []User{}
+
+	if err != nil {
+		return result, err
+	}
+	defer session.Close()
+	userCollection := session.DB(MONGODB).C("users")
+	err = userCollection.Find(bson.M{"ID": id}).Select(bson.M{"Bookmarks": 1}).All(&result)
+	if err != nil {
+		return result, err
+	}
+	return result, nil
 }
 
 //AddComment adds a comment to a skill
@@ -236,6 +270,25 @@ func Search(location string, query string, count int, page int, perPage int) ([]
 		return Results, Page, err
 	}
 	return Results, Page, nil
+
+}
+
+//Popular does something i dont know
+func Popular() (Skill, error) {
+	session, err := mgo.Dial(MONGOSERVER)
+
+	result := Skill{}
+
+	if err != nil {
+		return result, err
+	}
+	defer session.Close()
+	skillCollection := session.DB(MONGODB).C("skills")
+	err = skillCollection.Find(bson.M{}).Limit(15).Sort("rating").All(&result)
+	if err != nil {
+		return result, err
+	}
+	return result, nil
 }
 
 //checkFmt checks the value of an error and prints it to standard output. I'm

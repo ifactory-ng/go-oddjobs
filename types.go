@@ -2,25 +2,27 @@ package main
 
 //User would hold the user data for retrieving and sending items to the database
 type User struct {
-	Name     string
-	ID       string
-	About    string
-	Email    string
-	Location string
-	Address  string
-	Phone    string
-	Image    string
+	Name      string
+	ID        string
+	About     string
+	Email     string
+	Location  string
+	Address   string
+	Bookmarks []BookMark
+	Phone     string
+	Gender    string
+	Image     string
 }
 
 //Skill struct holds skill data to be used for adding and retrieving user skills
 //from the database
 type Skill struct {
 	SkillName   string
+	TagName     string
 	UserID      string
 	Location    string
 	Address     string
 	Price       string
-	TagName     string
 	Description string
 	Comments    []Comment
 	Rating      int
@@ -55,4 +57,11 @@ type Page struct {
 	Total int
 	Count int
 	Skip  int
+}
+
+//BookMark holds bookmark data
+type BookMark struct {
+	Name  string
+	Phone string
+	Email string
 }

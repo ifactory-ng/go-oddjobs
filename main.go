@@ -66,7 +66,6 @@ func renderTemplate(w http.ResponseWriter, tmpl string, q interface{}) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 }
-
 func main() {
 	//serve assets
 	fs := http.FileServer(http.Dir("templates/assets/"))
@@ -76,6 +75,10 @@ func main() {
 	http.HandleFunc("/", HomeHandler)
 	http.HandleFunc("/search", SearchHandler)
 	http.HandleFunc("/profile", ProfileHandler)
+
+	http.HandleFunc("/authenticate", LoginHandler)
+	http.HandleFunc("/user/bookmark/", BookmarkHandler)
+	log.Fatal(http.ListenAndServe(PORT, nil))
 
 	fmt.Println("serving on http://localhost" + PORT)
 	log.Fatal(http.ListenAndServe(PORT, context.ClearHandler(http.DefaultServeMux)))
