@@ -78,7 +78,6 @@ func main() {
 
 	http.HandleFunc("/authenticate", LoginHandler)
 	http.HandleFunc("/user/bookmark/", BookmarkHandler)
-	log.Fatal(http.ListenAndServe(PORT, nil))
 
 	fmt.Println("serving on http://localhost" + PORT)
 	log.Fatal(http.ListenAndServe(PORT, context.ClearHandler(http.DefaultServeMux)))
