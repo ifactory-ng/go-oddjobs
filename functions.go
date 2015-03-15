@@ -89,7 +89,7 @@ func AddSkill(data *Skill) error {
 }
 
 //GetSkills gets all the skills added by user
-func GetSkills(id string) ([]Skill, error) {
+func GetSkills(ID string) ([]Skill, error) {
 	session, err := mgo.Dial(MONGOSERVER)
 
 	result := []Skill{}
@@ -165,7 +165,7 @@ func Authenticate(user *User) error {
 	userCollection := session.DB(MONGODB).C("users")
 
 	err = userCollection.Find(bson.M{"ID": user.ID}).One(&result)
-	if result.id != "" {
+	if result.ID != "" {
 		return err
 	}
 
