@@ -18,7 +18,8 @@ type User struct {
 //from the database
 type Skill struct {
 	SkillName   string
-	TagName     string
+	UserName    string
+	TagName     []string
 	UserID      string
 	Location    string
 	Address     string

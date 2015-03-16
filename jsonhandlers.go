@@ -49,14 +49,17 @@ func UserSkillshandler(w http.ResponseWriter, r *http.Request) {
 		w.Write(data)
 
 	case "POST":
+		userName, _ := GetProfile(id)
+		tags := strings.Split(r.FormValue("tag"), ",")
 		skill := &Skill{
 
 			UserID:      id,
+			UserName:    userName.Name,
 			Location:    r.FormValue("location"),
 			Description: r.FormValue("desc"),
 			Address:     r.FormValue("address"),
 			SkillName:   r.FormValue("skill_name"),
-			TagName:     r.FormValue("tag"),
+			TagName:     tags,
 		}
 		fmt.Println(r.Form)
 		resp := AddSkill(skill)

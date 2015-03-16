@@ -102,7 +102,7 @@ func GetSkills(id string) ([]Skill, error) {
 
 	skillCollection := session.DB(MONGODB).C("skills")
 
-	err = skillCollection.Find(bson.M{"userID": ID}).Select(bson.M{"comments": 0}).All(&result)
+	err = skillCollection.Find(bson.M{"userID": id}).Select(bson.M{"comments": 0}).All(&result)
 	if err != nil {
 		return result, err
 	}
@@ -165,7 +165,7 @@ func Authenticate(user *User) error {
 	userCollection := session.DB(MONGODB).C("users")
 
 	err = userCollection.Find(bson.M{"ID": user.ID}).One(&result)
-	if result.id != "" {
+	if result.ID != "" {
 		return err
 	}
 
