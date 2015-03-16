@@ -73,13 +73,14 @@ func main() {
 
 	//serving public views
 	http.HandleFunc("/", HomeHandler)
+	http.HandleFunc("/search", SearchHandler)
+	http.HandleFunc("/profile", ProfileHandler)
+
 	http.HandleFunc("/api/authenticate", LoginHandler)
 	http.HandleFunc("/api/profile/", UserProfileHandler)
 	http.HandleFunc("/api/profile/skills/", UserSkillshandler)
 	http.HandleFunc("/api/user/skill/", SingleSkillHandler)
 	http.HandleFunc("/api/user/bookmark/", BookmarkHandler)
-	log.Fatal(http.ListenAndServe(PORT, nil))
-	http.HandleFunc("/search", SearchHandler)
 
 	fmt.Println("serving on http://localhost" + PORT)
 	log.Fatal(http.ListenAndServe(PORT, context.ClearHandler(http.DefaultServeMux)))

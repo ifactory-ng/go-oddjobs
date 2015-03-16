@@ -89,7 +89,7 @@ func AddSkill(data *Skill) error {
 }
 
 //GetSkills gets all the skills added by user
-func GetSkills(id string) ([]Skill, error) {
+func GetSkills(ID string) ([]Skill, error) {
 	session, err := mgo.Dial(MONGOSERVER)
 
 	result := []Skill{}
