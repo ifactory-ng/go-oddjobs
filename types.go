@@ -1,7 +1,12 @@
 package main
 
+import (
+	"gopkg.in/mgo.v2/bson"
+)
+
 //User would hold the user data for retrieving and sending items to the database
 type User struct {
+	_id       bson.ObjectId
 	Name      string
 	ID        string
 	About     string
@@ -43,6 +48,11 @@ type LoginDataStruct struct {
 	URL  string
 	User User
 }
+type LookUp struct {
+	Provider       string
+	IdFromProvider string
+	UserId         bson.ObjectId
+}
 
 //Page carries pagination info to aid in knowing whether any given page has a
 //next or previous page, and to know its page number
@@ -62,7 +72,7 @@ type Page struct {
 
 //BookMark holds bookmark data
 type BookMark struct {
-	Name  string
-	Phone string
-	Email string
+	Name      string
+	SkillName string
+	id        string
 }

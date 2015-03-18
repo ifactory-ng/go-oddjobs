@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"gopkg.in/mgo.v2/bson"
 	"net/http"
 	"strings"
 )
@@ -10,16 +11,22 @@ import (
 //LoginHandler serves the profile data to the user
 func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(r.Form)
+	id := bson.NewObjectId()
+	//nw := strings.(id)
 	user := &User{
 		Email:    r.FormValue("email"),
 		ID:       r.FormValue("ID"),
 		Name:     r.FormValue("name"),
 		Gender:   r.FormValue("gender"),
 		Location: r.FormValue("location"),
+		_id:      id,
 	}
 
 	fmt.Println(user)
-	Authenticate(user)
+	i, _ := Authenticate(user, r.FormValue("provider"))
+	i2, _ := json.Marshal(i)
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(i2)
 }
 
 //UserProfileHandler serves the profile
@@ -80,9 +87,9 @@ func BookmarkHandler(w http.ResponseWriter, r *http.Request) {
 		w.Write(bookmarkData)
 	case "POST":
 		bookmark := &BookMark{
-			Name:  r.FormValue("name"),
-			Phone: r.FormValue("phone"),
-			Email: r.FormValue("email"),
+			id:        r.FormValue("id"),
+			Name:      r.FormValue("phone"),
+			SkillName: r.FormValue("email"),
 		}
 		AddBookmark(bookmark, urlID)
 	}

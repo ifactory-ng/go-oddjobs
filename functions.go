@@ -8,27 +8,66 @@ import (
 )
 
 //NewUser is for adding a new user to the database. Please note that what you pass to the function is a pointer to the actual data, note the data its self. ie newUser(&NameofVariable)
-func NewUser(data *User) error {
+func NewUser(data *User, socialProvider string) (bson.ObjectId, error) {
 
 	//MONGOSERVER is a variable containing the mongo db instance address
 	session, err := mgo.Dial(MONGOSERVER)
 	checkPanic(err)
 	defer session.Close()
+	//user := User{}
+	//userId := data._id
+	lookUpSession := session.DB(MONGODB).C("lookup")
 
 	//MONGODB is the database name while MONGOC is the collection name
 	collection := session.DB(MONGODB).C("users")
 
+	//i := bson.NewObjectId()
+
 	err = collection.Insert(data)
-
 	if err != nil {
-		return err
+		return "error", err
 	}
-	return nil
+	//collection.FindId(i).One(&user)
+	//fmt.Println(i)
+	//fmt.Println(user)
+	//err = collection.Find(bson.M{"ID": data.ID}).One(&user)
+	//checkFmt(err)
 
+	lookup := &LookUp{
+		Provider:       socialProvider,
+		IdFromProvider: data.ID,
+		UserId:         data._id,
+	}
+	fmt.Println(data)
+	err = lookUpSession.Insert(lookup)
+
+	return data._id, nil
+}
+
+//Authenticate check if user exists if not create a new user document NewUser function is called within this function. note the user struct being passed
+//to this function should alredi contain a self generated objectid
+func Authenticate(user *User, provider string) (bson.ObjectId, error) {
+	fmt.Println("test")
+	session, err := mgo.Dial(MONGOSERVER)
+	if err != nil {
+		return " ", err
+	}
+	defer session.Close()
+	result := LookUp{}
+	lookupCollection := session.DB(MONGODB).C("lookup")
+
+	err = lookupCollection.Find(bson.M{"IdFromProvider": user.ID, "provider": provider}).One(&result)
+	//checkFmt(err)
+
+	if result.UserId != "" {
+		return result.UserId, nil
+	}
+
+	return NewUser(user, provider)
 }
 
 //UpdateUser updates a users details
-func UpdateUser(data *User) error {
+func UpdateUser(data *User, id string) error {
 	session, err := mgo.Dial(MONGOSERVER)
 
 	if err != nil {
@@ -38,7 +77,7 @@ func UpdateUser(data *User) error {
 	defer session.Close()
 
 	collection := session.DB(MONGODB).C("users")
-	query := bson.M{"ID": data.ID}
+	query := bson.M{"_id": id}
 	change := bson.M{"$set": data}
 
 	err = collection.Update(query, change)
@@ -62,7 +101,7 @@ func GetProfile(id string) (User, error) {
 	defer session.Close()
 	collection := session.DB(MONGODB).C("users")
 
-	err = collection.Find(bson.M{"ID": id}).One(&result)
+	err = collection.Find(bson.M{"_id": id}).One(&result)
 	if err != nil {
 		return result, err
 	}
@@ -93,7 +132,6 @@ func GetSkills(ID string) ([]Skill, error) {
 	session, err := mgo.Dial(MONGOSERVER)
 
 	result := []Skill{}
-
 	if err != nil {
 		return result, err
 	}
@@ -102,7 +140,7 @@ func GetSkills(ID string) ([]Skill, error) {
 
 	skillCollection := session.DB(MONGODB).C("skills")
 
-	err = skillCollection.Find(bson.M{"userID": id}).Select(bson.M{"comments": 0}).All(&result)
+	err = skillCollection.Find(bson.M{"UserID": ID}).Select(bson.M{"comments": 0}).All(&result)
 	if err != nil {
 		return result, err
 	}
@@ -146,30 +184,12 @@ func GetComment(id string) (Skill, error) {
 
 	skillCollection := session.DB(MONGODB).C("skills")
 
-	err = skillCollection.Find(bson.M{"ID": id}).Select(bson.M{"Comments": 1}).One(&result)
+	err = skillCollection.Find(bson.M{"_id": id}).Select(bson.M{"Comments": 1}).One(&result)
 	if err != nil {
 		return result, err
 	}
 	return result, nil
 
-}
-
-//Authenticate check if user exists if not create a new user document NewUser function is called within this function
-func Authenticate(user *User) error {
-	session, err := mgo.Dial(MONGOSERVER)
-	if err != nil {
-		return err
-	}
-	defer session.Close()
-	result := User{}
-	userCollection := session.DB(MONGODB).C("users")
-
-	err = userCollection.Find(bson.M{"ID": user.ID}).One(&result)
-	if result.ID != "" {
-		return err
-	}
-
-	return NewUser(user)
 }
 
 //AddBookmark is a utility function for adding bookmarks
@@ -180,7 +200,7 @@ func AddBookmark(bookmark *BookMark, id string) error {
 	}
 	defer session.Close()
 	userCollection := session.DB(MONGODB).C("users")
-	query := bson.M{"ID": id}
+	query := bson.M{"_id": id}
 	change := bson.M{"$push": bson.M{"Bookmarks": bookmark}}
 	err = userCollection.Update(query, change)
 	if err != nil {
@@ -199,7 +219,7 @@ func GetBookmarks(id string) ([]User, error) {
 	}
 	defer session.Close()
 	userCollection := session.DB(MONGODB).C("users")
-	err = userCollection.Find(bson.M{"ID": id}).Select(bson.M{"Bookmarks": 1}).All(&result)
+	err = userCollection.Find(bson.M{"_id": id}).Select(bson.M{"Bookmarks": 1}).All(&result)
 	if err != nil {
 		return result, err
 	}
