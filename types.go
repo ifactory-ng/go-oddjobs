@@ -24,7 +24,7 @@ type User struct {
 type Skill struct {
 	SkillName   string
 	UserName    string
-	TagName     []string
+	Tags        []string
 	UserID      string
 	Location    string
 	Address     string

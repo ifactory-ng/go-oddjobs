@@ -66,7 +66,8 @@ func UserSkillshandler(w http.ResponseWriter, r *http.Request) {
 			Description: r.FormValue("desc"),
 			Address:     r.FormValue("address"),
 			SkillName:   r.FormValue("skill_name"),
-			TagName:     tags,
+			Tags:        tags,
+			Rating:      0,
 		}
 		fmt.Println(r.Form)
 		resp := AddSkill(skill)
