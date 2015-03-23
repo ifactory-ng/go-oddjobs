@@ -81,6 +81,7 @@ func main() {
 	http.HandleFunc("/api/profile/skills/", UserSkillshandler)
 	http.HandleFunc("/api/user/skill/", SingleSkillHandler)
 	http.HandleFunc("/api/user/bookmark/", BookmarkHandler)
+	http.HandleFunc("/api/feeds", FeedsHandler)
 
 	fmt.Println("serving on http://localhost" + PORT)
 	log.Fatal(http.ListenAndServe(PORT, context.ClearHandler(http.DefaultServeMux)))

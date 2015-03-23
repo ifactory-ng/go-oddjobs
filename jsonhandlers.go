@@ -106,3 +106,11 @@ func SingleSkillHandler(w http.ResponseWriter, r *http.Request) {
 	w.Write(data)
 
 }
+
+func FeedsHandler(w http.ResponseWriter, r *http.Request) {
+	v, _ := Popular()
+	w.Header().Set("Content_Type", "application/json")
+	data, _ := json.Marshal(v)
+	fmt.Println(data)
+	w.Write(data)
+}
