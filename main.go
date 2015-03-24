@@ -75,6 +75,8 @@ func main() {
 	http.HandleFunc("/", HomeHandler)
 	http.HandleFunc("/search", SearchHandler)
 	http.HandleFunc("/profile", ProfileHandler)
+	http.HandleFunc("/profile/edit", ProfileEditHandler)
+	http.HandleFunc("/profile/skills", SkillsHandler)
 
 	http.HandleFunc("/api/authenticate", LoginHandler)
 	http.HandleFunc("/api/profile/", UserProfileHandler)
