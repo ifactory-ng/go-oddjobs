@@ -1,1 +1,1 @@
-web: ./go-oddjobs -port 
+web: go-oddjobs  

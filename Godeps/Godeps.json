@@ -1,0 +1,36 @@
+{
+	"ImportPath": "github.com/smilecs/go-oddjobs",
+	"GoVersion": "go1.4",
+	"Deps": [
+		{
+			"ImportPath": "github.com/antonholmquist/jason",
+			"Comment": "v1.0.0-2-g68e75fc",
+			"Rev": "68e75fc5edb0504b2d80699f01cd7e6df7f555aa"
+		},
+		{
+			"ImportPath": "github.com/gorilla/context",
+			"Rev": "215affda49addc4c8ef7e2534915df2c8c35c6cd"
+		},
+		{
+			"ImportPath": "github.com/gorilla/securecookie",
+			"Rev": "5f171f42328bdd573211bb82bdee8f259c4c61ae"
+		},
+		{
+			"ImportPath": "github.com/gorilla/sessions",
+			"Rev": "1f45645972a051deb63c8e8e3c594041a6145e35"
+		},
+		{
+			"ImportPath": "golang.org/x/net/context",
+			"Rev": "97d8e4e174133a4d1d2171380e510eb4dea8f5ea"
+		},
+		{
+			"ImportPath": "golang.org/x/oauth2",
+			"Rev": "c4932a9b59a60daa02a28db1bb7be39d6ec2e542"
+		},
+		{
+			"ImportPath": "gopkg.in/mgo.v2",
+			"Comment": "r2015.01.24",
+			"Rev": "c6a7dce14133ccac2dcac3793f1d6e2ef048503a"
+		}
+	]
+}
