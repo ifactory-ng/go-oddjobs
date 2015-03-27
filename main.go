@@ -45,7 +45,7 @@ func init() {
 	if PORT == "" {
 		fmt.Println("No Global port has been defined, using default")
 
-		PORT = ":8080"
+		PORT = "8080"
 
 	}
 
@@ -86,6 +86,6 @@ func main() {
 	http.HandleFunc("/api/user/bookmark/", BookmarkHandler)
 	http.HandleFunc("/api/feeds", FeedsHandler)
 
-	fmt.Println("serving on http://localhost" + PORT)
-	log.Fatal(http.ListenAndServe(PORT, context.ClearHandler(http.DefaultServeMux)))
+	fmt.Println("serving on http://localhost:" + PORT)
+	log.Fatal(http.ListenAndServe(":"+PORT, context.ClearHandler(http.DefaultServeMux)))
 }
