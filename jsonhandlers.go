@@ -5,21 +5,29 @@ import (
 	"fmt"
 	"net/http"
 	"strings"
+
+	"gopkg.in/mgo.v2/bson"
 )
 
 //LoginHandler serves the profile data to the user
 func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(r.Form)
+	id := bson.NewObjectId()
+	//nw := strings.(id)
 	user := &User{
 		Email:    r.FormValue("email"),
 		ID:       r.FormValue("ID"),
 		Name:     r.FormValue("name"),
 		Gender:   r.FormValue("gender"),
 		Location: r.FormValue("location"),
+		_id:      id,
 	}
 
 	fmt.Println(user)
-	Authenticate(user)
+	i, _ := Authenticate(user, r.FormValue("provider"))
+	i2, _ := json.Marshal(i)
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(i2)
 }
 
 //UserProfileHandler serves the profile
@@ -49,14 +57,18 @@ func UserSkillshandler(w http.ResponseWriter, r *http.Request) {
 		w.Write(data)
 
 	case "POST":
+		userName, _ := GetProfile(id)
+		tags := strings.Split(r.FormValue("tag"), ",")
 		skill := &Skill{
 
 			UserID:      id,
+			UserName:    userName.Name,
 			Location:    r.FormValue("location"),
 			Description: r.FormValue("desc"),
 			Address:     r.FormValue("address"),
 			SkillName:   r.FormValue("skill_name"),
-			//Tags:        r.FormValue("tag"),
+			Tags:        tags,
+			Rating:      0,
 		}
 		fmt.Println(r.Form)
 		resp := AddSkill(skill)
@@ -77,9 +89,9 @@ func BookmarkHandler(w http.ResponseWriter, r *http.Request) {
 		w.Write(bookmarkData)
 	case "POST":
 		bookmark := &BookMark{
-			Name:  r.FormValue("name"),
-			Phone: r.FormValue("phone"),
-			Email: r.FormValue("email"),
+			id:        r.FormValue("id"),
+			Name:      r.FormValue("phone"),
+			SkillName: r.FormValue("email"),
 		}
 		AddBookmark(bookmark, urlID)
 	}
@@ -94,4 +106,12 @@ func SingleSkillHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.Write(data)
 
+}
+
+func FeedsHandler(w http.ResponseWriter, r *http.Request) {
+	v, _ := Popular()
+	w.Header().Set("Content_Type", "application/json")
+	data, _ := json.Marshal(v)
+	fmt.Println(data)
+	w.Write(data)
 }
