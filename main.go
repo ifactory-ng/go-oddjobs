@@ -66,6 +66,7 @@ func renderTemplate(w http.ResponseWriter, tmpl string, q interface{}) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 }
+
 func main() {
 	//serve assets
 	fs := http.FileServer(http.Dir("templates/assets/"))
