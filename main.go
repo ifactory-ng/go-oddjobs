@@ -72,19 +72,19 @@ func main() {
 	fs := http.FileServer(http.Dir("templates/assets/"))
 	http.Handle("/assets/", http.StripPrefix("/assets/", fs))
 
-	//serving public views
-	http.HandleFunc("/", HomeHandler)
-	http.HandleFunc("/search", SearchHandler)
-	http.HandleFunc("/profile", ProfileHandler)
-	http.HandleFunc("/profile/edit", ProfileEditHandler)
-	http.HandleFunc("/profile/skills", SkillsHandler)
-
 	http.HandleFunc("/api/authenticate", LoginHandler)
 	http.HandleFunc("/api/profile/", UserProfileHandler)
 	http.HandleFunc("/api/profile/skills/", UserSkillshandler)
 	http.HandleFunc("/api/user/skill/", SingleSkillHandler)
 	http.HandleFunc("/api/user/bookmark/", BookmarkHandler)
 	http.HandleFunc("/api/feeds", FeedsHandler)
+
+	//serving public views
+	http.HandleFunc("/search", SearchHandler)
+	http.HandleFunc("/profile/edit", ProfileEditHandler)
+	http.HandleFunc("/profile/skills", SkillsHandler)
+	http.HandleFunc("/profile", ProfileHandler)
+	http.HandleFunc("/", HomeHandler)
 
 	fmt.Println("serving on http://localhost:" + PORT)
 	log.Fatal(http.ListenAndServe(":"+PORT, context.ClearHandler(http.DefaultServeMux)))
