@@ -10,11 +10,13 @@ import (
 //HomeHandler serves the home/search page to the user
 func HomeHandler(w http.ResponseWriter, r *http.Request) {
 	type homestruct struct {
-		User LoginDataStruct
+		User  LoginDataStruct
+		FBURL string
 	}
 
 	data := homestruct{
-		User: LoginData(r),
+		User:  LoginData(r),
+		FBURL: FBURL,
 	}
 
 	renderTemplate(w, "index.html", data)
