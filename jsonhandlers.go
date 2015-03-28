@@ -11,6 +11,8 @@ import (
 
 //LoginHandler serves the profile data to the user
 func LoginHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
 	fmt.Println(r.Form)
 	id := bson.NewObjectId()
 	//nw := strings.(id)
@@ -30,6 +32,8 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 
 //UserProfileHandler serves the profile
 func UserProfileHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
 	//id := r.FormValue("id")
 	tmp := strings.Split(r.URL.Path, "/")
 	id := tmp[2]
