@@ -73,7 +73,6 @@ func main() {
 	http.Handle("/assets/", http.StripPrefix("/assets/", fs))
 
 	//serving public views
-	http.HandleFunc("/", HomeHandler)
 	http.HandleFunc("/search", SearchHandler)
 	http.HandleFunc("/profile", ProfileHandler)
 	http.HandleFunc("/profile/edit", ProfileEditHandler)
@@ -85,6 +84,7 @@ func main() {
 	http.HandleFunc("/api/user/skill/", SingleSkillHandler)
 	http.HandleFunc("/api/user/bookmark/", BookmarkHandler)
 	http.HandleFunc("/api/feeds", FeedsHandler)
+	http.HandleFunc("/", HomeHandler)
 
 	fmt.Println("serving on http://localhost:" + PORT)
 	log.Fatal(http.ListenAndServe(":"+PORT, context.ClearHandler(http.DefaultServeMux)))
