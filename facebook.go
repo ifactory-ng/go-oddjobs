@@ -39,11 +39,11 @@ func init() {
 		RedirectURL:  RootURL + "/fblogin", // change this to your webserver adddress
 		Scopes:       []string{"email"},
 		Endpoint: oauth2.Endpoint{
-			AuthURL:  "https://www.facebook.com/dialog/oauth",
-			TokenURL: "https://graph.facebook.com/oauth/access_token",
+			AuthURL:  "http://www.facebook.com/dialog/oauth",
+			TokenURL: "http://graph.facebook.com/oauth/access_token",
 		},
 	}
-	FBURL = fbConfig.AuthCodeURL("")
+	FBURL = fbConfig.AuthCodeURL("hellothereasimasdfkjhaskjdf")
 }
 
 //FacebookOAUTH is the handler that would be redirected to
@@ -67,7 +67,7 @@ func FacebookOAUTH(w http.ResponseWriter, r *http.Request) {
 	// handle err. You need to change this into something more robust
 	// such as redirect back to home page with error message
 	if err != nil {
-		w.Write([]byte(err.Error()))
+		fmt.Println(err.Error())
 	}
 
 	str, err := ioutil.ReadAll(response.Body)
