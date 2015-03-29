@@ -39,8 +39,8 @@ func init() {
 		RedirectURL:  RootURL + "/fblogin", // change this to your webserver adddress
 		Scopes:       []string{"email"},
 		Endpoint: oauth2.Endpoint{
-			AuthURL:  "http://www.facebook.com/dialog/oauth",
-			TokenURL: "http://graph.facebook.com/oauth/access_token",
+			AuthURL:  "https://www.facebook.com/dialog/oauth",
+			TokenURL: "https://graph.facebook.com/oauth/access_token",
 		},
 	}
 	FBURL = fbConfig.AuthCodeURL("hellothereasimasdfkjhaskjdf")
@@ -54,6 +54,7 @@ func FacebookOAUTH(w http.ResponseWriter, r *http.Request) {
 
 	//RedirectURL := RootURL + "/fblogin"
 	fmt.Println(code)
+
 	accessToken, err := fbConfig.Exchange(oauth2.NoContext, code)
 	if err != nil {
 		fmt.Println(err.Error())
