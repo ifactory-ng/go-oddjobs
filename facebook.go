@@ -53,8 +53,12 @@ func FacebookOAUTH(w http.ResponseWriter, r *http.Request) {
 	code := r.FormValue("code")
 
 	//RedirectURL := RootURL + "/fblogin"
-
+	fmt.Println(code)
 	accessToken, err := fbConfig.Exchange(oauth2.NoContext, code)
+	if err != nil {
+		fmt.Println(err.Error())
+		fmt.Println("Error")
+	}
 	fmt.Println("Expect access token next")
 	fmt.Println(accessToken)
 
