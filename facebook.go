@@ -65,7 +65,7 @@ func FacebookOAUTH(w http.ResponseWriter, r *http.Request) {
 
 	//response, err := http.Get("https://graph.facebook.com/me?access_token=" + accessToken.AccessToken)
 
-	client := fbConfig.Client(oauth2.NoContext, token)
+	client := fbConfig.Client(oauth2.NoContext, accessToken)
 	resp, err := client.Get("https://graph.facebook.com/me")
 
 	// handle err. You need to change this into something more robust
