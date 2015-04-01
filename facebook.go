@@ -62,11 +62,11 @@ func FacebookOAUTH(w http.ResponseWriter, r *http.Request) {
 	}
 	fmt.Println("Expect access token next")
 	//fmt.Println(accessToken.AccessToken)
+	//client := fbConfig.Client(oauth2.NoContext, accessToken)
 
-	//response, err := http.Get("https://graph.facebook.com/me?access_token=" + accessToken.AccessToken)
+	resp, err := http.Get("https://graph.facebook.com/me?access_token=" + accessToken.AccessToken)
 
-	client := fbConfig.Client(oauth2.NoContext, accessToken)
-	resp, err := client.Get("https://graph.facebook.com/me")
+	//resp, err := client.Get("https://graph.facebook.com/me?access_token="+accessToken.Acc)
 
 	// handle err. You need to change this into something more robust
 	// such as redirect back to home page with error message
