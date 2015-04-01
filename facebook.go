@@ -22,6 +22,8 @@ var (
 	FBURL string
 
 	fbConfig oauth2.Config
+	
+	oauthstring = "hellother"
 )
 
 func init() {
@@ -43,11 +45,23 @@ func init() {
 			TokenURL: "https://graph.facebook.com/oauth/access_token",
 		},
 	}
-	FBURL = fbConfig.AuthCodeURL("hellothereasimasdfkjhaskjdf")
+	
+	FBURL = fbConfig.AuthCodeURL(oauthstring)
 }
+
+
 
 //FacebookOAUTH is the handler that would be redirected to
 func FacebookOAUTH(w http.ResponseWriter, r *http.Request) {
+	
+		state := r.FormValue("state")
+	if state != oauthstring {
+		fmt.Printf("invalid oauth state, expected '%s', got '%s'\n", oauthStateString, state)
+		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
+		return
+	}
+
+	
 	// grab the code fragment
 
 	code := r.FormValue("code")
@@ -56,12 +70,13 @@ func FacebookOAUTH(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(code)
 
 	accessToken, err := fbConfig.Exchange(oauth2.NoContext, code)
-	if err != nil {
-		fmt.Println(err.Error())
-		fmt.Println("Error")
+  if err != nil {
+		fmt.Printf("oauthConf.Exchange() failed with '%s'\n", err)
+		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
+		return
 	}
 	fmt.Println("Expect access token next")
-	fmt.Println(accessToken.AccessToken)
+	fmt.Println(accessToken)
 	//client := fbConfig.Client(oauth2.NoContext, accessToken)
 
 	resp, err := http.Get("https://graph.facebook.com/me?access_token=" + accessToken.AccessToken)
