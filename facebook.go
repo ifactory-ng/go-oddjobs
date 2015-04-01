@@ -56,7 +56,7 @@ func FacebookOAUTH(w http.ResponseWriter, r *http.Request) {
 	
 		state := r.FormValue("state")
 	if state != oauthstring {
-		fmt.Printf("invalid oauth state, expected '%s', got '%s'\n", oauthStateString, state)
+		fmt.Printf("invalid oauth state, expected '%s', got '%s'\n", oauthstring, state)
 		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
 		return
 	}
