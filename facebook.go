@@ -61,7 +61,7 @@ func FacebookOAUTH(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("Error")
 	}
 	fmt.Println("Expect access token next")
-	//fmt.Println(accessToken.AccessToken)
+	fmt.Println(accessToken.AccessToken)
 	//client := fbConfig.Client(oauth2.NoContext, accessToken)
 
 	resp, err := http.Get("https://graph.facebook.com/me?access_token=" + accessToken.AccessToken)
