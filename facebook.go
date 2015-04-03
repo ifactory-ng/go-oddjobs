@@ -5,6 +5,8 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
+	"strconv"
+	"strings"
 
 	"github.com/antonholmquist/jason"
 	"golang.org/x/oauth2"
@@ -22,9 +24,15 @@ var (
 	FBURL string
 
 	fbConfig oauth2.Config
-	
+
 	oauthstring = "hellother"
 )
+
+//AccessToken is where the facebook authentication data would be stored
+type AccessToken struct {
+	Token  string
+	Expiry int64
+}
 
 func init() {
 
@@ -45,37 +53,89 @@ func init() {
 			TokenURL: "https://graph.facebook.com/oauth/access_token",
 		},
 	}
-	
+
 	FBURL = fbConfig.AuthCodeURL(oauthstring)
 }
 
+func readHTTPBody(response *http.Response) string {
 
+	fmt.Println("Reading body")
+
+	bodyBuffer := make([]byte, 5000)
+	var str string
+
+	count, err := response.Body.Read(bodyBuffer)
+
+	for ; count > 0; count, err = response.Body.Read(bodyBuffer) {
+
+		if err != nil {
+
+		}
+
+		str += string(bodyBuffer[:count])
+	}
+
+	return str
+
+}
+
+// GetAccessToken Converts a code to an Auth_Token
+func GetAccessToken(clientID string, code string, secret string, callbackURI string) AccessToken {
+	fmt.Println("GetAccessToken")
+	//https://graph.facebook.com/oauth/access_token?client_id=YOUR_APP_ID&redirect_uri=YOUR_REDIRECT_URI&client_secret=YOUR_APP_SECRET&code=CODE_GENERATED_BY_FACEBOOK
+	response, err := http.Get("https://graph.facebook.com/oauth/access_token?client_id=" +
+		clientID + "&redirect_uri=" + callbackURI +
+		"&client_secret=" + secret + "&code=" + code)
+
+	if err == nil {
+
+		auth := readHTTPBody(response)
+		//a, err := ioutil.ReadAll(response.Body)
+		fmt.Println(auth)
+		var token AccessToken
+
+		tokenArr := strings.Split(auth, "&")
+		fmt.Println(tokenArr)
+
+		token.Token = strings.Split(tokenArr[0], "=")[1]
+		expireInt, err := strconv.Atoi(strings.Split(tokenArr[1], "=")[1])
+
+		if err == nil {
+			token.Expiry = int64(expireInt)
+		}
+
+		return token
+	}
+
+	var token AccessToken
+
+	return token
+}
 
 //FacebookOAUTH is the handler that would be redirected to
 func FacebookOAUTH(w http.ResponseWriter, r *http.Request) {
-	
-		state := r.FormValue("state")
+
+	state := r.FormValue("state")
 	if state != oauthstring {
 		fmt.Printf("invalid oauth state, expected '%s', got '%s'\n", oauthstring, state)
 		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
 		return
 	}
 
-	
 	// grab the code fragment
 
 	code := r.FormValue("code")
 
 	//RedirectURL := RootURL + "/fblogin"
 	fmt.Println(code)
-
-	accessToken, err := fbConfig.Exchange(oauth2.NoContext, code)
-  if err != nil {
+	accessToken := GetAccessToken(FBClientID, code, FBClientSecret, fbConfig.RedirectURL)
+	//accessToken, err := fbConfig.Exchange(oauth2.NoContext, code)
+	/*if err != nil {
 		fmt.Printf("oauthConf.Exchange() failed with '%s'\n", err)
 		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
 		return
 	}
-	fmt.Println("Expect access token next")
+	fmt.Println("Expect access token next")*/
 	fmt.Println(accessToken)
 	//client := fbConfig.Client(oauth2.NoContext, accessToken)
 
