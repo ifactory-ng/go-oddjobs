@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"io/ioutil"
 	"net/http"
 	"os"
 	"strconv"
@@ -90,7 +89,7 @@ func GetAccessToken(clientID string, code string, secret string, callbackURI str
 	if err == nil {
 
 		auth := readHTTPBody(response)
-		//a, err := ioutil.ReadAll(response.Body)
+
 		fmt.Println(auth)
 		var token AccessToken
 
@@ -112,44 +111,25 @@ func GetAccessToken(clientID string, code string, secret string, callbackURI str
 	return token
 }
 
-//FacebookOAUTH is the handler that would be redirected to
+//FBLogin is the handler that would be redirected to
 func FacebookOAUTH(w http.ResponseWriter, r *http.Request) {
-
-	state := r.FormValue("state")
-	if state != oauthstring {
-		fmt.Printf("invalid oauth state, expected '%s', got '%s'\n", oauthstring, state)
-		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
-		return
-	}
-
 	// grab the code fragment
 
 	code := r.FormValue("code")
 
-	//RedirectURL := RootURL + "/fblogin"
-	fmt.Println(code)
-	accessToken := GetAccessToken(FBClientID, code, FBClientSecret, fbConfig.RedirectURL)
-	//accessToken, err := fbConfig.Exchange(oauth2.NoContext, code)
-	/*if err != nil {
-		fmt.Printf("oauthConf.Exchange() failed with '%s'\n", err)
-		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
-		return
-	}
-	fmt.Println("Expect access token next")*/
-	fmt.Println(accessToken)
-	//client := fbConfig.Client(oauth2.NoContext, accessToken)
+	RedirectURL := RootURL + "/FBLogin"
 
-	resp, err := http.Get("https://graph.facebook.com/me?access_token=" + accessToken.AccessToken)
+	accessToken := GetAccessToken(FBClientID, code, FBClientSecret, RedirectURL)
 
-	//resp, err := client.Get("https://graph.facebook.com/me?access_token="+accessToken.Acc)
+	response, err := http.Get("https://graph.facebook.com/me?access_token=" + accessToken.Token)
 
 	// handle err. You need to change this into something more robust
 	// such as redirect back to home page with error message
 	if err != nil {
-		fmt.Println(err.Error())
+		w.Write([]byte(err.Error()))
 	}
 
-	str, err := ioutil.ReadAll(resp.Body)
+	str := readHTTPBody(response)
 	fmt.Println(str)
 	user, err := jason.NewObjectFromBytes([]byte(str))
 	if err != nil {
@@ -193,3 +173,5 @@ func FacebookOAUTH(w http.ResponseWriter, r *http.Request) {
 
 	http.Redirect(w, r, "/", http.StatusFound)
 }
+
+
