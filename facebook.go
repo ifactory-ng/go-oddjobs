@@ -117,7 +117,7 @@ func FacebookOAUTH(w http.ResponseWriter, r *http.Request) {
 
 	code := r.FormValue("code")
 
-	RedirectURL := RootURL + "/FBLogin"
+	RedirectURL := RootURL + "/fblogin"
 
 	accessToken := GetAccessToken(FBClientID, code, FBClientSecret, RedirectURL)
 
