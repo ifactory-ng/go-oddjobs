@@ -40,7 +40,9 @@ func NewUser(data *User, socialProvider string) (bson.ObjectId, error) {
 	}
 	fmt.Println(data)
 	err = lookUpSession.Insert(lookup)
-
+if err != nil {
+		return "error", err
+	}
 	return data._id, nil
 }
 
