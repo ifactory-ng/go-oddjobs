@@ -60,17 +60,17 @@
         <ul>
             
             <li ><a class="active"><i class="fa fa-home"></i> Home</a></li>
-            {{ if eq .User.ID "" }}
-            <li><a href="/profile"><img class="img-circle img-ppic" src="{{.User.Image}}"/> <span>{{.User.Name}}</span></a></li>
+            {{ if eq .User.URL "" }}
+            <li><a href="/profile"><img class="img-circle img-ppic" src="{{.User.User.Image}}"/> <span>{{.User.User.Name}}</span></a></li>
             
             <li><a><i class="fa fa-unlock" ></i> logout</a></li>
-          {{ else }}
-              <li>
-                  <a class="" href="{{.FBURL}}">
-                      <i class="fa fa-facebook"></i>&nbsp;Login with facebook
-                  </a>
-              </li>
-          {{ end }}
+    {{ else }}
+        <li>
+            <a class="" href="{{.User.URL}}">
+                <i class="fa fa-facebook"></i>&nbsp;Login with facebook
+            </a>
+        </li>
+    {{ end }}
           </ul>
           <div style="clear:both"></div>
         </nav>
