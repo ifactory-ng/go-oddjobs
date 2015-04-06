@@ -33,7 +33,7 @@ func LoginData(r *http.Request) LoginDataStruct {
 
 	if err != nil {
 		data := LoginDataStruct{
-			URL: "FBURL",
+			URL: FBURL,
 		}
 		return data
 	}
