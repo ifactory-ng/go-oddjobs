@@ -12,11 +12,12 @@ func sessionCheck(r *http.Request) (User, error) {
 		return user, err
 	}
 
-	if session.Values["email"] == nil {
+	if session.Values["FBID"] == nil {
 		return user, errors.New("The User session is empty or hasn't been created")
 	}
 
 	user = User{
+	  ID: session.Values["FBID"].(string),
 		Name:  session.Values["name"].(string),
 		Email: session.Values["email"].(string),
 		Image: session.Values["image"].(string),

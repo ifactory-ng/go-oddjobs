@@ -167,6 +167,18 @@ func FacebookOAUTH(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		fmt.Println(err)
 	}
+	
+	u := User{
+    	Name:name,
+    	ID:id,
+    	Email:email,
+    	Image:img,
+  }
+  _,err=Authenticate(&u, "facebook")
+  
+  if err!=nil{
+    fmt.Println(err)
+  }
 
 	fmt.Println("Checking the session values")
 	fmt.Println(session.Values["email"])

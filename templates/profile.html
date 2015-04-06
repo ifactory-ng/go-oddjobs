@@ -60,24 +60,32 @@
         <ul>
             
             <li ><a class="active"><i class="fa fa-home"></i> Home</a></li>
-            <li><a><img class="img-circle img-ppic" src="/assets/images/ppic.jpg"/> Anthony Alaribe</a></li>
+            {{ if eq .User.ID "" }}
+            <li><a href="/profile"><img class="img-circle img-ppic" src="{{.User.Image}}"/> <span>{{.User.Name}}</span></a></li>
+            
             <li><a><i class="fa fa-unlock" ></i> logout</a></li>
+          {{ else }}
+              <li>
+                  <a class="" href="{{.FBURL}}">
+                      <i class="fa fa-facebook"></i>&nbsp;Login with facebook
+                  </a>
+              </li>
+          {{ end }}
           </ul>
           <div style="clear:both"></div>
-
         </nav>
         <div style="clear:both"></div>
     </header>
 
     
     <main class="profile container">
-    <h2 class="title">Settings</h2> 
+    <h2 class="title">Settings</h2>
       <div class="before-side col-md-9">
           <div class="left-side col-md-4">
               <div>
-                  <img src="/assets/images/ppic.jpg" class="img-circle
+                  <img src="{{.User.Image}}" class="img-circle
                     " style="max-width:90%;">
-                  <h4>Anthony Alaribe</h4>
+                  <h4>{{.User.Name}}</h4>
                   <small><i class="fa fa-at"></i>&nbsp; tonyalaribe</small><br/>
                   <small><i class="fa fa-map-marker"></i>&nbsp; Calabar</small>
                   <div style="clear:both;"></div>
@@ -95,33 +103,33 @@
               <br/><br/>
               <div class="profile-menus">
                   <a >
-                      <i class="fa fa-list-alt"></i>&nbsp;&nbsp;Feeds 
+                      <i class="fa fa-list-alt"></i>&nbsp;&nbsp;Feeds
                         <i class="fa fa-chevron-right pull-right"></i>
                         <div style="clear:both;"></div>
                   </a>
                     <a >
-                      <i class="fa fa-lightbulb-o"></i>&nbsp;&nbsp;Skills 
+                      <i class="fa fa-lightbulb-o"></i>&nbsp;&nbsp;Skills
                         <i class="fa fa-chevron-right pull-right"></i>
                         <div style="clear:both;"></div>
                   </a>
 
                 <a >
-                      <i class="fa fa-pencil"></i>&nbsp;&nbsp;Reviews (0) 
+                      <i class="fa fa-pencil"></i>&nbsp;&nbsp;Reviews (0)
                         <i class="fa fa-chevron-right pull-right"></i>
                         <div style="clear:both;"></div>
                   </a>
                 <a >
-                      <i class="fa fa-camera-retro"></i>&nbsp;&nbsp;Photos (0) 
+                      <i class="fa fa-camera-retro"></i>&nbsp;&nbsp;Photos (0)
                         <i class="fa fa-chevron-right pull-right"></i>
                         <div style="clear:both;"></div>
                   </a>
                 <a onclick="bookmark()" >
-                      <i class="fa fa-bookmark"></i>&nbsp;&nbsp;Bookmarks (0) 
+                      <i class="fa fa-bookmark"></i>&nbsp;&nbsp;Bookmarks (0)
                         <i class="fa fa-chevron-right pull-right"></i>
                         <div style="clear:both;"></div>
                   </a>
                   <a >
-                      <i class="fa fa-map-marker"></i>&nbsp;&nbsp;Worked with (0) 
+                      <i class="fa fa-map-marker"></i>&nbsp;&nbsp;Worked with (0)
                         <i class="fa fa-chevron-right pull-right"></i>
                         <div style="clear:both;"></div>
                   </a>
@@ -213,7 +221,7 @@
     <script type="text-template" id="add-skill">
           <form   style="border-bottom:1px solid #f0f0f0;
                   padding-bottom:10px; " >
-                  <input type="text" value="<%= SkillName %>" name="SkillName" 
+                  <input type="text" value="<%= SkillName %>" name="SkillName"
                                      class="form-control"
                                      style="display:inline-block;
                                      width:48%";>
@@ -228,16 +236,16 @@
                 <br/><br/>
                   <input class="form-control" type="text" value="<%= Address %>"
                   name="Address"/>
-                  <br/> 
+                  <br/>
                   <textarea class="form-control" name="Description" ><%=Description %></textarea>
                   <br/>
                   <div class="tags">
                   </div>
-                  <br/> 
+                  <br/>
                   <div>
                       <input type="text" class=" form-control tag-input"
                       style="display:inline-block; width:150px">
-                      <a class="btn  btn-default tag-submit"><i class="fa fa-plus"></i></a>     
+                      <a class="btn  btn-default tag-submit"><i class="fa fa-plus"></i></a>
                       <button class="btn btn-lg btn-success pull-right newsave"> <i
                               class="fa fa-save" ></i></button>
                   </div>
@@ -251,7 +259,7 @@
     <script type="text-template" id="edit-skill">
           <form   style="border-bottom:1px solid #f0f0f0;
                   padding-bottom:10px; ">
-                  <input type="text" value="<%= SkillName %>" name="SkillName" 
+                  <input type="text" value="<%= SkillName %>" name="SkillName"
                                      class="form-control"
                                      style="display:inline-block;
                                      width:48%";>
@@ -266,7 +274,7 @@
                 <br/><br/>
                   <input class="form-control" type="text" value="<%= Address %>"
                   name="Address"/>
-                  <br/> 
+                  <br/>
                   <textarea class="form-control" name="Description" ><%=Description %></textarea>
                   <br/>
                   <div class="tags">
@@ -274,11 +282,11 @@
                               1</a>&nbsp;
                           <a href="#" class="close">x</a></span>
                   </div>
-                  <br/> 
+                  <br/>
                   <div>
                       <input type="text" class=" form-control "
                       style="display:inline-block; width:150px">
-                      <button class="btn  btn-default"><i class="fa fa-plus"></i></button>     
+                      <button class="btn  btn-default"><i class="fa fa-plus"></i></button>
                       <button class="btn btn-lg btn-success pull-right save"> <i
                               class="fa fa-save" ></i></button>
                   </div>
@@ -301,7 +309,7 @@
                   <small class="tags">
 
                     <% _.forEach(Tags, function(tag){ %>
-                      <span class="btn btn-xs btn-default"> 
+                      <span class="btn btn-xs btn-default">
                       <a href="#">
                         <%= tag %></a>
                       </a>&nbsp;
@@ -341,7 +349,7 @@
                    var skillsView = new skills.View({collection:skillsC});
                     skillsView.render();
      
-                    }}); 
+                    }});
                                
             },
             profileEdit: function(){
@@ -350,11 +358,11 @@
                
                 var profileData = new profile.Model({});
                 var profileView = new profile.View({model:profileData});
-                profileData.on('sync', profileView.render, profileView); 
+                profileData.on('sync', profileView.render, profileView);
                 
 
                 profileData.fetch();
-               profileView.render(); 
+               profileView.render();
             },
 
             bookmarksView: function(){
