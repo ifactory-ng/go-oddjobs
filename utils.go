@@ -32,7 +32,7 @@ func LoginData(r *http.Request) LoginDataStruct {
 
 	if err != nil {
 		data := LoginDataStruct{
-			URL: FBURL,
+			URL: "FBURL",
 		}
 		return data
 	}
@@ -90,5 +90,4 @@ func SearchPagination(count int, page int, perPage int) Page {
 	pg.Pages = pgs
 
 	return pg
-
 }
