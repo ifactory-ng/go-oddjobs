@@ -95,8 +95,8 @@
             
 
           <ul>
-              <li ><a class="active" href="/"><i class="fa fa-home"></i> Home</a></li>
-    {{ if eq .User.User.ID "" }}
+              <li ><a class="active" href="/"><i class="fa fa-home"></i> Home{{.User.URL}}</a></li>
+    {{ if eq .User.URL "" }}
             <li><a href="/profile"><img class="img-circle img-ppic" src="{{.User.User.Image}}"/> <span>{{.User.User.Name}}</span></a></li>
             
             <li><a><i class="fa fa-unlock" ></i> logout</a></li>
