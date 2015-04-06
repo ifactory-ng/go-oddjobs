@@ -61,7 +61,7 @@
         <div style="display:table; height:100%; width:100%;">
         <div class=""
             style="display:table-cell;vertical-align:middle;width:100%;text-align:center;">
-            <h1>Need Someone to get that Job Done?<br/><small>Your search begins here</small></h1> 
+            <h1>Need Someone to get that Job Done?<br/><small>Your search begins here</small></h1>
             
           <div class="ghost-btn-group" style="text-align:center">
               <div class=" location">
@@ -86,23 +86,26 @@
                <div style="clear:both"></div>
                <nav style=display:block;"width:100%;">
             
-            <div align="center"> 
+            <div align="center">
                 <a href="#home"  class="down-arrow"><i class="fa
                 fa-chevron-down"></i></a>
             </div>
+            
+             <svg xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" version="1.1" class="logo" height="60" viewBox="0 0 285 65"><style >.s0{fill:#f2f2f2;}</style><style>.style0{fill:	#f2f2f2;}.style1{fill:	#e6e6e6;}.style2{fill:	#c83737;}.style3{font-size:	32.08200455px;line-height:	125%;letter-spacing:	0px;word-spacing:	0px;fill:	#ffffff;font-family:	Raleway;-inkscape-font-specification:	Raleway;}.style4{font-size:	31.29948807px;letter-spacing:	0px;word-spacing:	0px;fill:	#ffffff;-inkscape-font-specification:	Raleway;}.style5{font-size:	31.29948807px;font-weight:	bold;fill:	#f9f9f9;-inkscape-font-specification:	Raleway Bold;}.style6{fill:	#cccccc;}</style><defs/><metadata/><g transform="translate(-8.933582,-45.702706)"><g transform="matrix(0.53108294,0,0,0.53108294,-16.333914,-272.31193)"><polygon points="397.1 368.5 372.9 358.8 288.9 512.1 387.6 512.1 430.9 454.8 468.1 454.8 507.8 512.1 541.3 512.1 464.7 320.5 433.5 312 " transform="matrix(0.2429009,0,0,0.2429009,50.932968,593.70511)" class="style0" fill="#f2f2f2"/><polygon points="496.2 512.1 463.1 464.3 435.7 464.3 399.6 512.1 " transform="matrix(0.2429009,0,0,0.2429009,50.932968,593.70511)" class="style1" fill="#e6e6e6"/><path d="m60.3 695.8-6.9 22.3H63l7.7-22.2 2.2-17.3h7.3l6.6 17.9-4 21.6h9.3l4.6-24.4-4.6-12.9-1.7-5.8 25.2 14.3-4.7 8.2 11 6.3 11.6-20.1-11-6.3-4.6 7.9-29.3-16.6-1.6-5.5 2.9-11.6 1.2 10.6 2 5.2 7.8 4.6-3.3-11.6-2.5-22.2-8.1-0.3-1.4-3.9c5.4-1.1 9.5-5.8 9.8-11.5l-24.5-3.2c-0.2 0.8-0.3 1.7-0.3 2.6 0 4.3 2.2 8.1 5.5 10.3l-0.2 0-4.9 4.1-6.3-0.5-13.8 12v18.3l10.9 2.7-1.6 27.3zm-2.4-36.6v-5.5l4.6-4.2v10.8l-4.6-1z" class="style0" fill="#f2f2f2"/><path d="m95.2 619.9 3.7 0.5c0.5-11.1-4.3-18.3-13-19.4-0.7-0.1-1.4-0.1-2.1-0.1-7.7 0-13.3 5.6-15.5 15.5l3.2 0.4 23.7 3.1z" class="style2" fill="#c83737"/></g><text x="97.300003" y="99.599998" xml:space="preserve" class="style3" style="-inkscape-font-specification:Raleway;fill:#fff;font-family:Raleway;font-size:32.08200455px;letter-spacing:0px;line-height:125%;word-spacing:0px"><tspan x="97.300003" y="99.599998" dx="0" dy="0" rotate="0 0 0 0 0 0 0 0 0 0 0 0" class="style4" style="-inkscape-font-specification:Raleway;fill:#fff;font-size:31.29948807px;letter-spacing:0px;word-spacing:0px"><tspan class="style5" style="-inkscape-font-specification:Raleway Bold;fill:#f9f9f9;font-size:31.29948807px;font-weight:bold">Odd</tspan><tspan class="style6" fill="#ccc">jobs.com</tspan></tspan></text></g></svg>
+            
 
           <ul>
               <li ><a class="active" href="/"><i class="fa fa-home"></i> Home</a></li>
     {{ if eq .User.URL "" }}
-            <li><a href="/profile"><img class="img-circle img-ppic" src="pic"/> <span ng-bind="user.name"></span></a></li>
+            <li><a href="/profile"><img class="img-circle img-ppic" src="{{.User.User.Image}}"/> <span>{{.User.User.Name}}</span></a></li>
             
             <li><a><i class="fa fa-unlock" ></i> logout</a></li>
     {{ else }}
-    <li>
-        <a class="" href="{{.User.URL}}">
-            <i class="fa fa-facebook"></i>&nbsp;Login with facebook
-        </a>
-    </li>
+        <li>
+            <a class="" href="{{.User.URL}}">
+                <i class="fa fa-facebook"></i>&nbsp;Login with facebook
+            </a>
+        </li>
     {{ end }}
           </ul>
           
@@ -116,10 +119,9 @@
         <br/><br/><br/>
         <h2>Don't want to search? Explore Popular Groups.</h2>
         <br/>
-
         <div class="home-skills-group row">
             
-            <a href="#"> 
+            <a href="#">
             <div class="blue-gradient ">
                <span >Carpenters</span>
             </div>
@@ -143,7 +145,7 @@
             </div>
             </a>
             
-            <a href="#"> 
+            <a href="#">
             <div class="blue-gradient ">
                <span >Carpenters</span>
             </div>

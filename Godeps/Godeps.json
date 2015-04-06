@@ -3,6 +3,11 @@
 	"GoVersion": "go1.4",
 	"Deps": [
 		{
+			"ImportPath": "github.com/antonholmquist/jason",
+			"Comment": "v1.0.0-1-g636a4c0",
+			"Rev": "636a4c07304e3f5efb95544271702d104514b427"
+		},
+		{
 			"ImportPath": "github.com/gorilla/context",
 			"Rev": "215affda49addc4c8ef7e2534915df2c8c35c6cd"
 		},
@@ -13,6 +18,14 @@
 		{
 			"ImportPath": "github.com/gorilla/sessions",
 			"Rev": "1f45645972a051deb63c8e8e3c594041a6145e35"
+		},
+		{
+			"ImportPath": "golang.org/x/net/context",
+			"Rev": "46077d3c5415f800cd8105911d4ed880c1db2138"
+		},
+		{
+			"ImportPath": "golang.org/x/oauth2",
+			"Rev": "5361962df4497a7fc777f5c3bd1b5c7ac36c604c"
 		},
 		{
 			"ImportPath": "gopkg.in/mgo.v2",
