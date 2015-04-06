@@ -80,9 +80,10 @@ func main() {
 
 	http.HandleFunc("/api/authenticate", LoginHandler)
 	http.HandleFunc("/api/profile/", UserProfileHandler)
-	http.HandleFunc("/api/profile/skills/", UserSkillshandler)
-	http.HandleFunc("/api/user/skill/", SingleSkillHandler)
-	http.HandleFunc("/api/user/bookmark/", BookmarkHandler)
+	http.HandleFunc("/api/Getskills/", UserSkillshandler)
+	http.HandleFunc("/api/Userskill/", SingleSkillHandler)
+	http.HandleFunc("/api/Userbookmark/", BookmarkHandler)
+	http.HandleFunc("/api/search", ApiSearchHandler)
 	http.HandleFunc("/api/feeds", FeedsHandler)
 	http.HandleFunc("/", HomeHandler)
 

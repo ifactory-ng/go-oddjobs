@@ -77,7 +77,7 @@ func UpdateUser(data *User, id string) error {
 	defer session.Close()
 
 	collection := session.DB(MONGODB).C("users")
-	query := bson.M{"_id": id}
+	query := bson.ObjectIdHex(id)
 	change := bson.M{"$set": data}
 
 	err = collection.Update(query, change)
@@ -101,7 +101,7 @@ func GetProfile(id string) (User, error) {
 	defer session.Close()
 	collection := session.DB(MONGODB).C("users")
 
-	err = collection.Find(bson.M{"_id": id}).One(&result)
+	err = collection.FindId(bson.ObjectIdHex(id)).One(&result)
 	if err != nil {
 		return result, err
 	}
@@ -140,7 +140,7 @@ func GetSkills(ID string) ([]Skill, error) {
 
 	skillCollection := session.DB(MONGODB).C("skills")
 
-	err = skillCollection.Find(bson.M{"UserID": ID}).Select(bson.M{"comments": 0}).All(&result)
+	err = skillCollection.Find(bson.M{"userid": ID}).Select(bson.M{"comments": 0}).All(&result)
 	if err != nil {
 		return result, err
 	}
@@ -162,19 +162,20 @@ func GetSkill(id string) (Skill, error) {
 
 	skillCollection := session.DB(MONGODB).C("skills")
 
-	err = skillCollection.Find(bson.M{"_id": id}).Select(bson.M{"comments": 0}).One(&result)
+	err = skillCollection.FindId(bson.ObjectIdHex(id)).Select(bson.M{"comments": 0}).One(&result)
 	if err != nil {
 		return result, err
 	}
+
 	return result, nil
 
 }
 
 //GetComment retrieves the reviews for a particular skill document
-func GetComment(id string) (Skill, error) {
+func GetComment(id string) ([]Skill, error) {
 	session, err := mgo.Dial(MONGOSERVER)
 
-	result := Skill{}
+	result := []Skill{}
 
 	if err != nil {
 		return result, err
@@ -184,7 +185,7 @@ func GetComment(id string) (Skill, error) {
 
 	skillCollection := session.DB(MONGODB).C("skills")
 
-	err = skillCollection.Find(bson.M{"_id": id}).Select(bson.M{"Comments": 1}).One(&result)
+	err = skillCollection.FindId(bson.ObjectIdHex(id)).Select(bson.M{"Comments": 1}).One(&result)
 	if err != nil {
 		return result, err
 	}
@@ -200,7 +201,7 @@ func AddBookmark(bookmark *BookMark, id string) error {
 	}
 	defer session.Close()
 	userCollection := session.DB(MONGODB).C("users")
-	query := bson.M{"_id": id}
+	query := bson.ObjectIdHex(id)
 	change := bson.M{"$push": bson.M{"Bookmarks": bookmark}}
 	err = userCollection.Update(query, change)
 	if err != nil {
@@ -219,7 +220,7 @@ func GetBookmarks(id string) ([]User, error) {
 	}
 	defer session.Close()
 	userCollection := session.DB(MONGODB).C("users")
-	err = userCollection.Find(bson.M{"_id": id}).Select(bson.M{"Bookmarks": 1}).All(&result)
+	err = userCollection.FindId(bson.ObjectIdHex(id)).Select(bson.M{"Bookmarks": 1}).All(&result)
 	if err != nil {
 		return result, err
 	}
@@ -264,7 +265,7 @@ func Search(location string, query string, count int, page int, perPage int) ([]
 	skillCollection := session.DB(MONGODB).C("skills")
 
 	index := mgo.Index{
-		Key: []string{"$text:skillName", "$text:description", "$text:location"},
+		Key: []string{"$text:skillname", "$text:description", "$text:location"},
 	}
 
 	err = skillCollection.EnsureIndex(index)
@@ -294,17 +295,17 @@ func Search(location string, query string, count int, page int, perPage int) ([]
 }
 
 //Popular does something i dont know
-func Popular() (Skill, error) {
+func Popular() ([]Skill, error) {
 	session, err := mgo.Dial(MONGOSERVER)
 
-	result := Skill{}
+	result := []Skill{}
 
 	if err != nil {
 		return result, err
 	}
 	defer session.Close()
 	skillCollection := session.DB(MONGODB).C("skills")
-	err = skillCollection.Find(bson.M{}).Limit(15).Sort("rating").All(&result)
+	err = skillCollection.Find(bson.M{}).Limit(30).Sort("rating").All(&result)
 	if err != nil {
 		return result, err
 	}
