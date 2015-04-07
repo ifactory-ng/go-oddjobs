@@ -72,12 +72,6 @@ func main() {
 	fs := http.FileServer(http.Dir("templates/assets/"))
 	http.Handle("/assets/", http.StripPrefix("/assets/", fs))
 
-	//serving public views
-	http.HandleFunc("/search", SearchHandler)
-	http.HandleFunc("/profile", ProfileHandler)
-	http.HandleFunc("/profile/edit", ProfileEditHandler)
-	http.HandleFunc("/profile/skills", SkillsHandler)
-
 	http.HandleFunc("/api/authenticate", LoginHandler)
 	http.HandleFunc("/api/profile/", UserProfileHandler)
 	http.HandleFunc("/api/Getskills/", UserSkillshandler)
@@ -85,7 +79,6 @@ func main() {
 	http.HandleFunc("/api/Userbookmark/", BookmarkHandler)
 	http.HandleFunc("/api/search", ApiSearchHandler)
 	http.HandleFunc("/api/feeds", FeedsHandler)
-	http.HandleFunc("/", HomeHandler)
 
 	//serving public views
 	http.HandleFunc("/fblogin", FacebookOAUTH)
